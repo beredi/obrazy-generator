@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, Grid } from "@mui/material";
 import { Record, RecordType } from "./Record";
 import { AddNew } from "./AddNew";
@@ -105,7 +105,7 @@ function App() {
           fileName="ZOZNAM"
           style={{ textDecoration: "none" }}
         >
-          {({ loading, error }) =>
+          {({ loading }) =>
             loading ? (
               "Loading document"
             ) : (
@@ -113,6 +113,7 @@ function App() {
                 variant={"contained"}
                 color={"success"}
                 sx={{ marginLeft: "10px" }}
+                disabled={selectedRecords.length === 0}
               >
                 <DownloadOutlined /> PDF
               </Button>

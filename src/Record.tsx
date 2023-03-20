@@ -27,7 +27,7 @@ export const Record = ({ record, handleRemove, selected, onChange }: Props) => {
       }}
     >
       <Checkbox
-        value={selected}
+        checked={selected}
         onChange={() => onChange(record)}
         color={"warning"}
       />
