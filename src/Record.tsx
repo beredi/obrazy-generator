@@ -1,5 +1,5 @@
 import { Box, Button, Checkbox } from "@mui/material";
-import { DeleteForeverOutlined } from "@mui/icons-material";
+import { DeleteForeverOutlined, EditOutlined } from "@mui/icons-material";
 
 export type RecordType = {
   id: number;
@@ -16,9 +16,16 @@ interface Props {
   handleRemove: (id: number) => void;
   selected: boolean;
   onChange: (record: RecordType) => void;
+  handleOnEdit: (id: number) => void;
 }
 
-export const Record = ({ record, handleRemove, selected, onChange }: Props) => {
+export const Record = ({
+  record,
+  handleRemove,
+  selected,
+  onChange,
+  handleOnEdit,
+}: Props) => {
   return (
     <Box
       sx={{
@@ -37,6 +44,14 @@ export const Record = ({ record, handleRemove, selected, onChange }: Props) => {
       <p>Autor: {record.autor}</p>
       <p>Tel: {record.tel}</p>
       <p>Cena: {record.cena}</p>
+      <Button
+        color={"warning"}
+        variant={"outlined"}
+        onClick={() => handleOnEdit(record.id)}
+      >
+        <EditOutlined />
+      </Button>
+
       <Button
         color={"error"}
         variant={"outlined"}

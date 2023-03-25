@@ -13,20 +13,36 @@ import { useState } from "react";
 interface Props {
   open: boolean;
   onClose: () => void;
-  handleAddNew: (record: RecordType) => void;
+  handleAddNew?: (record: RecordType) => void;
+  handleEdit?: (record: RecordType) => void;
+  editRecord?: RecordType;
 }
 
-export const AddNew = ({ open, onClose, handleAddNew }: Props) => {
-  const [naziv, setNaziv] = useState<string>("");
-  const [tel, setTel] = useState<string>("");
-  const [tehnika, setTehnika] = useState<string>("");
-  const [dimenzija, setDimenzija] = useState<string>("");
-  const [autor, setAutor] = useState<string>("");
-  const [cena, setCena] = useState<string>("");
+export const AddNew = ({
+  open,
+  onClose,
+  handleAddNew,
+  handleEdit,
+  editRecord,
+}: Props) => {
+  const [naziv, setNaziv] = useState<string>(
+    editRecord ? editRecord.naziv : ""
+  );
+  const [tel, setTel] = useState<string>(editRecord ? editRecord.tel : "");
+  const [tehnika, setTehnika] = useState<string>(
+    editRecord ? editRecord.tehnika : ""
+  );
+  const [dimenzija, setDimenzija] = useState<string>(
+    editRecord ? editRecord.dimenzija : ""
+  );
+  const [autor, setAutor] = useState<string>(
+    editRecord ? editRecord.autor : ""
+  );
+  const [cena, setCena] = useState<string>(editRecord ? editRecord.cena : "");
 
   const addNewHandler = () => {
     const record: RecordType = {
-      id: Date.now(),
+      id: editRecord ? editRecord.id : Date.now(),
       naziv: naziv,
       tehnika: tehnika,
       autor: autor,
@@ -35,7 +51,8 @@ export const AddNew = ({ open, onClose, handleAddNew }: Props) => {
       cena: cena,
     };
 
-    handleAddNew(record);
+    handleAddNew && handleAddNew(record);
+    handleEdit && handleEdit(record);
     closeHandler();
   };
 
@@ -130,7 +147,7 @@ export const AddNew = ({ open, onClose, handleAddNew }: Props) => {
       </DialogContent>
       <DialogActions>
         <Button variant="contained" onClick={addNewHandler} color={"success"}>
-          Pridať
+          {editRecord ? "Upraviť" : "Pridať"}
         </Button>
         <Button variant="contained" onClick={closeHandler} color={"error"}>
           Zrušiť

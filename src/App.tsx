@@ -20,6 +20,8 @@ function App() {
   const [selectedRecords, setSelectedRecords] = useState<RecordType[]>([]);
 
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [openEditDialog, setOpenEditDialog] = useState<boolean>(false);
+  const [editRecord, setEditRecord] = useState<RecordType | null>(null);
 
   const addNew = async (newRecord: RecordType) => {
     const newList = [...recordsState, newRecord];
@@ -59,6 +61,29 @@ function App() {
     return selectedRecords.some(
       (selectedRecord) => selectedRecord.id === record.id
     );
+  };
+
+  const handleOnEdit = (id: number) => {
+    const recordForEdit = recordsState.find((record) => record.id === id);
+    if (recordForEdit) {
+      setEditRecord(recordForEdit);
+      setOpenEditDialog(true);
+    }
+  };
+
+  const closeEditDialog = () => {
+    setEditRecord(null);
+    setOpenEditDialog(false);
+  };
+
+  const handleEditRecord = (record: RecordType) => {
+    const newList = [...recordsState];
+    const index = newList.findIndex(
+      (editRecordIndex) => editRecordIndex.id === record.id
+    );
+    newList[index] = { ...record };
+    setRecordsState(newList);
+    localStorage.setItem("localRecords", JSON.stringify(newList));
   };
 
   return (
@@ -130,6 +155,7 @@ function App() {
                 handleRemove={removeItem}
                 selected={checkSelected(record)}
                 onChange={onChangeSelected}
+                handleOnEdit={handleOnEdit}
               />
             </Grid>
           );
@@ -140,6 +166,14 @@ function App() {
         onClose={() => setOpenDialog(false)}
         handleAddNew={addNew}
       />
+      {editRecord && (
+        <AddNew
+          open={openEditDialog}
+          onClose={closeEditDialog}
+          handleEdit={handleEditRecord}
+          editRecord={editRecord}
+        />
+      )}
     </div>
   );
 }
